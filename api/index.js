@@ -1,24 +1,28 @@
-const serverless = require('serverless-http');
-const mongoose = require('mongoose');
-const createApp = require('../src/app');
+const serverless = require('serverless-http')
+const mongoose = require('mongoose')
+const createApp = require('../src/app')
 
-let connPromise;
+let connPromise
 async function connect() {
   if (!connPromise) {
-    const uri = process.env.MONGODB_URI;
+    const uri = process.env.MONGODB_URI
     if (uri && mongoose.connection.readyState === 0) {
-      connPromise = mongoose.connect(uri);
+      connPromise = mongoose.connect(uri)
     } else {
-      connPromise = Promise.resolve();
+      connPromise = Promise.resolve()
     }
   }
-  return connPromise;
+  return connPromise
 }
 
-const app = createApp();
+const app = createApp()
 
 module.exports = async (req, res) => {
-  await connect();
-  const handler = serverless(app);
-  return handler(req, res);
-};
+  const path = (req.url || '').split('?')[0]
+  const isHealth = req.method === 'GET' && (path === '/' || path === '/api')
+  if (!isHealth) {
+    await connect()
+  }
+  const handler = serverless(app)
+  return handler(req, res)
+}
