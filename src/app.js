@@ -17,8 +17,8 @@ function createApp() {
   app.use('/api/auth', authRoutes);
   app.use('/api/products', productRoutes);
 
-  app.get('/', (req, res) => {
-    res.json({ ok: true, service: 'backend', timestamp: Date.now() });
+  app.get('/api', (req, res) => {
+    res.json({ ok: true, service: 'backend', base: '/api', timestamp: Date.now() })
   });
 
   return app;
