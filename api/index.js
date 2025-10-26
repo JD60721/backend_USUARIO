@@ -1,4 +1,3 @@
-const serverless = require('serverless-http')
 const mongoose = require('mongoose')
 const createApp = require('../src/app')
 
@@ -23,9 +22,11 @@ module.exports = async (req, res) => {
   const isHealthPath = path === '/' || path === '/api' || path === '/api/' || path === '/favicon.ico'
   const isHealthMethod = method === 'GET' || method === 'HEAD'
   const isHealth = isHealthPath && isHealthMethod
+
   if (!isHealth) {
     await connect()
   }
-  const handler = serverless(app)
-  return handler(req, res)
+
+  // Usa el app de Express directamente como handler
+  return app(req, res)
 }
