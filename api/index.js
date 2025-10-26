@@ -19,7 +19,10 @@ const app = createApp()
 
 module.exports = async (req, res) => {
   const path = (req.url || '').split('?')[0]
-  const isHealth = req.method === 'GET' && (path === '/' || path === '/api')
+  const method = (req.method || 'GET').toUpperCase()
+  const isHealthPath = path === '/' || path === '/api' || path === '/api/' || path === '/favicon.ico'
+  const isHealthMethod = method === 'GET' || method === 'HEAD'
+  const isHealth = isHealthPath && isHealthMethod
   if (!isHealth) {
     await connect()
   }

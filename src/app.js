@@ -21,6 +21,18 @@ function createApp() {
     res.json({ ok: true, service: 'backend', timestamp: Date.now() })
   });
 
+  app.get('/api', (req, res) => {
+    res.json({ ok: true, service: 'backend', base: '/api', timestamp: Date.now() })
+  });
+
+  app.head('/', (req, res) => {
+    res.status(200).end()
+  });
+
+  app.head('/api', (req, res) => {
+    res.status(200).end()
+  });
+
   return app;
 }
 
